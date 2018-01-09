@@ -15,7 +15,7 @@ typedef struct paren {
 char* hello_instrctions = "++++++++++[>+++++++>++++++++++>+++<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------."; // hello world
 
 int main(int argc, char** argv) {
-    char* ip = hello_instrctions; // instrction pointer
+    char* ip = hello_instrctions; // instruction pointer
 
     short allow_incrementing_array = 0;
     int start_length_of_data = 30000;
@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
                 exit(-1);
 
             default:
-                fprintf(stderr, "argument parcing has gone wrong, please report the error the the creater of the mudule\n");
+                fprintf(stderr, "argument parsing has gone wrong, please report the error the the creator of the module\n");
                 exit(-1);
         }
     }
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     } else if (argc == 1) {
         FILE *file = fopen(argv[0], "r");
         if(file == NULL) {
-            fprintf(stderr, "there was an error reading your instrciton file: %s\n", argv[0]);
+            fprintf(stderr, "there was an error reading your instruction file: %s\n", argv[0]);
             exit(1);
         }
         fseek(file, 0L, SEEK_END);
@@ -65,33 +65,33 @@ int main(int argc, char** argv) {
         int fd = fileno(file);
         ip = mmap(NULL, file_size, PROT_READ, MAP_SHARED, fd, 0);
         if(ip == MAP_FAILED) {
-            fprintf(stderr, "there was an error loading instrcctions into memmmory\n");
+            fprintf(stderr, "there was an error loading instructions into memory\n");
             exit(1);
         }
     } else {
-        fprintf(stderr, "please speicfy only one code file\n");
+        fprintf(stderr, "please specify only one code file\n");
         exit(1);
     }
 
 
-    // parenthases stack
+    // parentheses stack
     paren *head = NULL;
     paren *tail = NULL;
 
     int curr_length_of_data = start_length_of_data;
     unsigned char *data = calloc(sizeof(char), curr_length_of_data);
     if(data == NULL) {
-        fprintf(stderr, "couldn't allocate enough memorry for data\n");
+        fprintf(stderr, "couldn't allocate enough memory for data\n");
         exit(1);
     }
-    int data_index = 0; // to be called data pointer but will work as an index for implemetation purposes
+    int data_index = 0; // to be called data pointer but will work as an index for implementation purposes
 
-    int skipping = 0; // 0 for when executing instrction inside parens, 1 for when trying to find a matching parenthesis
-    int depth = 0;  // amout of parenthesis deep that we're in when trying to skip
+    int skipping = 0; // 0 for when executing instruction inside parens, 1 for when trying to find a matching parenthesis
+    int depth = 0;  // amount of parenthesis deep that we're in when trying to skip
 
     while (*ip != '\0' || *ip == EOF) {
 
-        // check if we are trying to locate parenthaces
+        // check if we are trying to locate parentheses
         if(skipping == 1) {
             if(*ip == '[') {
                 depth++;
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
                     exit(1);
                 }
 
-                // we need to increse the size of the array and continue execution
+                // we need to increase the size of the array and continue execution
                 int new_data_size = (curr_length_of_data * 2 <= max_length_of_data)? curr_length_of_data * 2: max_length_of_data;
                 char *new_data = calloc(sizeof(char), new_data_size);
                 memcpy(new_data, data, curr_length_of_data);
@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
             }
         } else if (*ip == ']') { // if data value is non 0 skip to matching opening paren otherwise continue
             if(head == NULL) {
-                fprintf(stderr, "An extra closing paren was found\n");
+                fprintf(stderr, "An extra closing paren  was found\n");
                 exit(1);
             }
 
@@ -179,7 +179,7 @@ int main(int argc, char** argv) {
     }
 
     if(head != NULL || skipping == 1) {
-        fprintf(stderr, "End of excecution was reached, and not enough closing parens where found\n");
+        fprintf(stderr, "End of execution was reached, and not enough closing parens where found\n");
         exit(1);
     } else {
         exit(0);
@@ -191,7 +191,7 @@ void print_help(char *exec_name) {
     printf("\n");
     printf("-h\tprint help information  displayed here\n");
     printf("-e\tallow for data array to be extended when filled up until it reaches final_data_length\n");
-    printf("-i\tset inicial size of data array.  Default to 30,000\n");
-    printf("-f\tset final size of data array after which expanding is not allowed, only relevet if extennsion is enabled\n");
+    printf("-i\tset initial size of data array.  Default to 30,000\n");
+    printf("-f\tset final size of data array after which expanding is not allowed, only relevant if extension is enabled\n");
     printf("file_path:\tfile to read instructions from\n");
 }
