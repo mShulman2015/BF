@@ -1,5 +1,3 @@
-// check spelling
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,7 +84,7 @@ int main(int argc, char** argv) {
         fprintf(stderr, "couldn't allocate enough memorry for data\n");
         exit(1);
     }
-    int data_index = 0; // to be called data pointer but will word as an index for implemetation purposes
+    int data_index = 0; // to be called data pointer but will work as an index for implemetation purposes
 
     int skipping = 0; // 0 for when executing instrction inside parens, 1 for when trying to find a matching parenthesis
     int depth = 0;  // amout of parenthesis deep that we're in when trying to skip
